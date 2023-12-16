@@ -15,4 +15,49 @@ aws ec2 authorize-security-group-ingress --group-name sec-group --protocol tcp -
 aws ec2 authorize-security-group-ingress --group-name sec-group --protocol tcp --port 3306 --cidr 0.0.0.0/0 
 aws ec2 authorize-security-group-ingress --group-name sec-group --protocol icmp --port -1 --cidr 0.0.0.0/0 
 
+mkdir ~/webserver
+cd ~/webserver
+# erstellen der inital Datei und befüllen mit Inhalt
+
+touch initial.txt
+table_prefix='$table_prefix'
+
+cat > initial.txt << END 
+#!/bin/bash
+
+# Update und installieren Apache web server, PHP, and MySQL
+sudo yum install wget
+sudo yum update -y
+sudo yum install -y httpd php mysql-server php-mbstring php-dom php-mysqli
+
+# Starten des Apache web server und MySQL
+sudo service httpd start
+sudo service mysqld start
+
+# Apache web server und MySQL bei boots starten
+sudo chkconfig httpd on
+sudo chkconfig mysqld on
+
+# Downlaod Wordpress
+cd /var/www/html
+sudo wget https://wordpress.org/latest.tar.gz
+sudo tar -xvzf latest.tar.gz
+sudo mv wordpress/* .
+sudo rm -rf wordpress latest.tar.gz
+
+# Berechtigungen richtig setzen
+sudo chown -R apache:apache /var/www/html
+sudo find /var/www/html -type d -exec chmod 755 {} \;
+sudo find /var/www/html -type f -exec chmod 644 {} \;
+
+# Wortpress Configuration file hinzufügen
+sudo cp wp-config-sample.php wp-config.php
+sudo sed -i 's/database_name_heredate/your_database_name/' wp-config.php
+sudo sed -i 's/username_here/your_username/' wp-config.php
+sudo sed -i 's/password_here/your_password/' wp-config.php
+
+# apache neu starten
+sudo service httpd restart
+END 
+
 aws ec2 run-instances --image-id ami-023c11a32b0207432 --count 1 --instance-type t2.micro --key-name key_cms --security-group-ids $sec_id --iam-instance-profile Name=LabInstanceProfile  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=webserver_cms}]'
