@@ -1,0 +1,16 @@
+version: 1.0
+services:
+  wordpress:
+    image: wordpress:latest
+    volumes:
+      - wp_data:/var/www/html
+    ports:
+      - 80:80
+    restart: always
+    environment:
+      - WORDPRESS_DB_HOST=<DB-Host>
+      - WORDPRESS_DB_USER=<DB-User>
+      - WORDPRESS_DB_PASSWORD=<DB-Password>
+      - WORDPRESS_DB_NAME=<DB-Name>
+volumes:
+  wp_data:
