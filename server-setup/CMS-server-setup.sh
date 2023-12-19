@@ -14,6 +14,11 @@ sudo tar -xvzf latest.tar.gz
 sudo mv wordpress/* .
 sudo rm -rf wordpress latest.tar.gz
 
+# Set the correct permissions
+sudo chown -R apache:apache /var/www/html
+sudo find /var/www/html -type d -exec chmod 755 {} \;
+sudo find /var/www/html -type f -exec chmod 644 {} \;
+
 cd server-setup
 cd docker
 sed -i "s/<DB-Host>/$1/g" docker-compose.yml
@@ -22,5 +27,7 @@ sed -i "s/<DB-Password>/$2/g" docker-compose.yml
 sed -i "s/<DB-Name>/$3/g" docker-compose.yml
 
 docker compose up -d
+
+
 
 
