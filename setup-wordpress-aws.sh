@@ -13,6 +13,7 @@ packages:
   - git
 runcmd:
   - git clone https://github.com/davidbuerge1/M346-CMS.git 
+  - cd M346-CMS
   - chmod +x setup-wordpress-aws.sh
   - cd server-setup
   - chmod 777 DB-server-setup.sh
@@ -49,6 +50,7 @@ packages:
   - snapd
 runcmd:
   - git clone https://github.com/davidbuerge1/M346-CMS.git
+  - cd M346-CMS
   - chmod +x setup-wordpress-aws.sh
   - cd server-setup 
   - chmod 777 CMS-server-setup.sh
