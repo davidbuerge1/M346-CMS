@@ -12,9 +12,10 @@ packages:
   - mariadb-server
   - git
 runcmd:
-  - git clone <Github Link> setup
-  - cd setup
+  - git clone https://github.com/davidbuerge1/M346-CMS.git setup
   - chmod +x setup-wordpress-aws.sh
+  - cd server-setup
+  - chmod 777 DB-server-setup.sh
   - bash DB-server-setup.sh $password
 END
 
@@ -48,8 +49,9 @@ packages:
   - snapd
 runcmd:
   - git clone <Github Link> WordPressCMS
-  - cd WordPressCMS/server-setup 
   - chmod +x setup-wordpress-aws.sh
+  - cd server-setup 
+  - chmod 777 <CMS-server-setup.sh>
   - bash CMS-server-setup.sh $WPDBPrivateIpAddress-ip $password WordPressDB
 END
 
