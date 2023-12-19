@@ -8,6 +8,12 @@ apt-get install docker-ce docker-ce-cli containerd.io -y
 curl -L https://github.com/docker/compose/releases/download/1.25.4/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
+cd /var/www/html
+sudo wget https://wordpress.org/latest.tar.gz
+sudo tar -xvzf latest.tar.gz
+sudo mv wordpress/* .
+sudo rm -rf wordpress latest.tar.gz
+
 cd server-setup
 cd docker
 sed -i "s/<DB-Host>/$1/g" docker-compose.yml
