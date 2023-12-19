@@ -12,11 +12,9 @@ packages:
   - mariadb-server
   - git
 runcmd:
-  - git clone https://github.com/davidbuerge1/M346-CMS.git 
-  - cd M346-CMS
+  - git clone "https://github.com/davidbuerge1/Wordpress-AWS.git" setup
+  - cd setup/server-setup
   - chmod +x setup-wordpress-aws.sh
-  - cd server-setup
-  - chmod 777 DB-server-setup.sh
   - bash DB-server-setup.sh $password
 END
 
@@ -26,7 +24,7 @@ aws ec2 create-security-group --group-name WordPress-net-Extern --description "E
 aws ec2 run-instances --image-id ami-08c40ec9ead489470 --count 1 --instance-type t2.micro --key-name WordPress-AWS-Key --security-groups WordPress-net-Intern --iam-instance-profile Name=LabInstanceProfile --user-data file://init.yaml --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=WordPressDB}]'
 
 WPDBInstanceId=$(aws ec2 describe-instances --query 'Reservations[0].Instances[0].InstanceId' --output text --filters "Name=tag:Name,Values=WordPressDB")
-WPDBPrivateIpAddressip=$(aws ec2 describe-instances --query 'Reservations[0].Instances[0].PrivateIpAddress' --output text --filters "Name=tag:Name,Values=WordPressDB")
+WPDBPrivateIpAddress-ip=$(aws ec2 describe-instances --query 'Reservations[0].Instances[0].PrivateIpAddress' --output text --filters "Name=tag:Name,Values=WordPressDB")
 
 SecurityGroupId=$(aws ec2 describe-security-groups --group-names 'WordPress-net-Extern' --query 'SecurityGroups[0].GroupId' --output text)
 
@@ -49,12 +47,11 @@ packages:
   - cron
   - snapd
 runcmd:
-  - git clone https://github.com/davidbuerge1/M346-CMS.git
-  - cd M346-CMS
+  - git clone "https://github.com/davidbuerge1/Wordpress-AWS.git" WordPressCMS
+  - cd WordPressCMS/server-setup 
   - chmod +x setup-wordpress-aws.sh
-  - cd server-setup 
-  - chmod 777 CMS-server-setup.sh
-  - bash CMS-server-setup.sh $WPDBPrivateIpAddressip $password WordPressDB
+  - bash CMS-server-setup.sh $WPDBPrivateIpAddress-ip $password WordPressDB
 END
 
 aws ec2 run-instances --image-id ami-08c40ec9ead489470 --count 1 --instance-type t2.micro --key-name WordPress-AWS-Key --security-groups WordPress-net-Extern --iam-instance-profile Name=LabInstanceProfile --user-data file://init.yaml --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=WordPressCMS}]'
+
