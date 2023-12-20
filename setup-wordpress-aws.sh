@@ -14,7 +14,7 @@ packages:
 runcmd:
   - git clone "https://github.com/davidbuerge1/M346-CMS.git" setup
   - cd setup/server-setup
-  - chmod +x setup-wordpress-aws.sh
+  - chmod +x DB-server-setup.sh
   - bash DB-server-setup.sh $password
 END
 
@@ -49,7 +49,7 @@ packages:
 runcmd:
   - git clone "https://github.com/davidbuerge1/M346-CMS.git" WordPressCMS
   - cd WordPressCMS/server-setup 
-  - chmod +x setup-wordpress-aws.sh
+  - chmod +x CMS-server-setup.sh
   - bash CMS-server-setup.sh $WPDBPrivateIpAddressip $password WordPressDB
 END
 
