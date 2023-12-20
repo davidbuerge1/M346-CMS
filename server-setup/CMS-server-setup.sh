@@ -15,22 +15,17 @@ sudo apt install php libapache2-mod-php
 
 # Download and extract WordPress
 sudo apt install wget
-cd /tmp
-wget https://wordpress.org/latest.tar.gz
-tar xzvf latest.tar.gz
-sudo cp -a /tmp/wordpress/. /var/www/html
+# Download and extract the latest WordPress
+cd /var/www/html
+sudo wget https://wordpress.org/latest.tar.gz
+sudo tar -xvzf latest.tar.gz
+sudo mv wordpress/* .
+sudo rm -rf wordpress latest.tar.gz
 
 # Set the correct permissions
-sudo chown -R www-data:www-data /var/www/html
-sudo chmod -R 755 /var/www/html
-
-# Configure Apache
-sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/wordpress.conf
-sudo sed -i 's/\/var\/www\/html/\/var\/www\/html\/wordpress/g' /etc/apache2/sites-available/wordpress.conf
-sudo a2dissite 000-default.conf
-sudo a2ensite wordpress.conf
-sudo a2enmod rewrite
-sudo systemctl restart apache2
+sudo chown -R apache:apache /var/www/html
+sudo find /var/www/html -type d -exec chmod 755 {} \;
+sudo find /var/www/html -type f -exec chmod 644 {} \;
 
 cd server-setup
 cd docker
