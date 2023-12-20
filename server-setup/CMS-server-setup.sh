@@ -23,7 +23,7 @@ sudo mv wordpress/* .
 sudo rm -rf wordpress latest.tar.gz
 
 # Set the correct permissions
-sudo chown -R apache:apache /var/www/html
+sudo chown -R root:root /var/www/html
 sudo find /var/www/html -type d -exec chmod 755 {} \;
 sudo find /var/www/html -type f -exec chmod 644 {} \;
 
