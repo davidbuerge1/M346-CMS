@@ -138,7 +138,7 @@ Anpassung der Mariadb conf
 sed -i '/^bind-address/ s/^/#/' /etc/mysql/mariadb.conf.d/50-server.cnf
 ```
 
-##[CMS-server-setup.sh](https://github.com/davidbuerge1/M346-CMS/blob/main/server-setup/CMS-server-setup.sh)
+## [CMS-server-setup.sh](https://github.com/davidbuerge1/M346-CMS/blob/main/server-setup/CMS-server-setup.sh)
 Installation von Docker
 ```
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
@@ -161,9 +161,11 @@ sed -i "s/<DB-Name>/$3/g" docker-compose.yml
 
 <a name="anker5"></a>
 ## 3. Anleitung  
-### 1. Schritt  
+### 1. Schritt 
+Hier sind die Voraussetungen, bevor die Instanzen installiert werden können.
  
-- [X] +Bsp.+
+- [X] Vollständige Konfiguration vom AWS Client auf einer Ubuntu-maschine.
+- [x] Es darf kein Key mit dem Namen 
   
 ### 2. Schritt
   
