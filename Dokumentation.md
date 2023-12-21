@@ -111,9 +111,52 @@ runcmd:
   - chmod +x CMS-server-setup.sh
   - sudo bash CMS-server-setup.sh $WPDBPrivateIpAddressip $password WordPressDB
 END
-
+```
+Hier wird die zweite Instanz  mithilfe des Init-files erstellt.
+``` 
 aws ec2 run-instances --image-id ami-08c40ec9ead489470 --count 1 --instance-type t2.micro --key-name WordPress-AWS-Key --security-groups WordPress-net-Extern --iam-instance-profile Name=LabInstanceProfile --user-data file://init.yaml --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=WordPressCMS}]'
-```   
+```
+
+## [CMS-server-setup.sh](https://github.com/davidbuerge1/M346-CMS/blob/main/server-setup/CMS-server-setup.sh)
+Dieser Befehl führt eine Änderung in der Datei "50-server.cnf" durch, die sich im Verzeichnis "/etc/mysql/mariadb.conf.d/" befindet. Dabei wird die Option "bind-address" so modifiziert, dass sie auf "127.0.0.1" festgelegt wird.
+```
+sudo sed -i 's/bind-address\s*=.*/bind-address = 127.0.0.1/' /etc/mysql/mariadb.conf.d/50-server.cnf
+```
+Der erste Befehl weist dem Benutzer 'root' alle Privilegien für alle Datenbanken zu, ermöglicht den Zugriff von jedem beliebigen Host aus und setzt das Passwort, das als Parameter '$1' übergeben wird. Der zweite Befehl aktualisiert die Berechtigungen, um die Änderungen wirksam zu machen. Der dritte Befehl erstellt eine neue Datenbank mit dem Namen "WordPressDB" unter Verwendung des angegebenen Benutzernamen und Passworts. Die Befehle werden alle mit Root-Berechtigungen ausgeführt, die durch sudo verliehen werden, und erfordern eine Passwortabfrage, um sich als Benutzer 'root' anzumelden.
+```
+echo "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '$1' WITH GRANT OPTION;" | sudo mysql -u root -p"$1"
+echo "FLUSH PRIVILEGES;" | sudo mysql -u root -p"$1"
+echo "create database WordPressDB;" | sudo mysql -u root -p"$1"
+```
+Mithilfe dieses Codes werden die beiden Ports freigegeben, um die Kommunikation zu ermöglichen.
+```
+ufw allow 3306
+ufw allow 22
+```
+Anpassung der Mariadb conf
+```
+sed -i '/^bind-address/ s/^/#/' /etc/mysql/mariadb.conf.d/50-server.cnf
+```
+
+##[CMS-server-setup.sh](https://github.com/davidbuerge1/M346-CMS/blob/main/server-setup/CMS-server-setup.sh)
+Installation von Docker
+```
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+apt-key fingerprint 0EBFCD88
+add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" -y
+apt update -y
+apt-get install docker-ce docker-ce-cli containerd.io -y
+curl -L https://github.com/docker/compose/releases/download/1.25.4/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+```
+Anpassung der des docker-compose.yml
+```
+cd /WordPressCMS/server-setup/docker
+sed -i "s/<DB-Host>/$1/g" docker-compose.yml
+sed -i "s/<DB-User>/root/g" docker-compose.yml
+sed -i "s/<DB-Password>/$2/g" docker-compose.yml
+sed -i "s/<DB-Name>/$3/g" docker-compose.yml
+```
     
 
 <a name="anker5"></a>
