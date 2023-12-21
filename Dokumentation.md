@@ -31,11 +31,88 @@ Für das Prokelt musste das CMS umgesetzt werden, sowie eine ausführliche Dokum
 
 <a name="anker4"></a>
 ## 2. Installation und Konfiguration
+  Für die Umsetzung haben wir 3 verschiedene FIles verwendet. Das [setup-wordpress-aws.sh](https://github.com/davidbuerge1/M346-CMS/blob/main/setup-wordpress-aws.sh) diente dabei als die "grundlegende" Datei, inder die Sicherheitsgruppen, Rules sowie die Schlüsselpaare definiert wurden. Das [DB-server-setup.sh](https://github.com/davidbuerge1/M346-CMS/blob/main/server-setup/DB-server-setup.sh), wurde dabei als Konfigurationsdatei für die Datenbank verwendet. Das [CMS-server-setup.sh](https://github.com/davidbuerge1/M346-CMS/blob/main/server-setup/CMS-server-setup.sh) wurde als Konfigurationsdatei für die Instanz verwendet, aufder das CMS läuft. Zum Code finden Sie weitere Informationen unter [Code erklärt](#anker8).
+
+  Am Anfang waren wir uns unschlüssig, wie wir das Projekt umsetzen könnten. Nach reichlichem informieren, haben wir uns dazu entschieden Docker zu verwenden, da es sehr Effizient ist und auch in Professionellen Umgebungen öfters verwendet wird. Ausserdem haben wir zwei verschiedene EC2 Instanzen verwendet, wobei die Instanz der Datenbank durch eine Sicherheitsgruppe geschützt ist so, dass nicht aus dem Internet direkt darauf zugegriffen werden kann. Die CMS Instanz, kommuniziert über die Interne IP-Adresse mit der Datenbank.
+
   
-  
-### Code Linie für Linie erklärt  
-```  
-+Code here+ 
+
+<a name="anker8"></a>
+### Erklärung des Codes
+## [setup-wordpress-aws.sh](https://github.com/davidbuerge1/M346-CMS/blob/main/setup-wordpress-aws.sh)
+
+Hier wird ein zufälliges Passwort generiert, welches von den Instanzen übernommen wird, um die Sicherheit zu steigern.
+```
+password=$(openssl rand -base64 36 | tr -dc 'a-zA-Z0-9' | head -c 54)
+```
+Dieser Code erstellt das Init-file für die Datenbank. Dabei werden die benötigten Packages installiert sowie befehle aufgeschrieben, die später auf der Instanz ausgeführt werden sollen. Beispielsweise das ausühren des Datenbank Setups. Ausserdem wird die Setupdatei der Datenbank direkt aus unserem Repository heruntergeladen und mithilfe des zuvor erstellten Passworts ausgeführt.
+```
+cat <<END > init.yaml
+#cloud-config
+package_update: true
+packages:
+  - curl
+  - mariadb-server
+  - git
+runcmd:
+  - git clone "https://github.com/davidbuerge1/M346-CMS.git" setup
+  - cd setup/server-setup
+  - chmod +x DB-server-setup.sh
+  - sudo bash DB-server-setup.sh $password
+END
+```
+Hier wird ein Keypair für den Zugriff auf die Instanz erstellt.
+```
+aws ec2 create-key-pair --key-name WordPress-AWS-Key --key-type rsa --query 'KeyMaterial' --output text > ./WordPress-AWS-Key.pem
+```
+Mit diesem Code werden die beiden Sicherheitsgruppen erstellt. Eine für die Interne Kommunikation zwischen den Instanzen und die andere für die Kommunikation mit externen Netzwerken.
+```
+aws ec2 create-security-group --group-name WordPress-net-Intern --description "Internes-Netzwerk-fuer-WordPressDB"
+aws ec2 create-security-group --group-name WordPress-net-Extern --description "Externes-Netzwerk-fuer-WordPressCMS"
+```
+Hier wird die Instance der Datenbank gestartet.
+```
+aws ec2 run-instances --image-id ami-08c40ec9ead489470 --count 1 --instance-type t2.micro --key-name WordPress-AWS-Key --security-groups WordPress-net-Intern --iam-instance-profile Name=LabInstanceProfile --user-data file://init.yaml --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=WordPressDB}]'
+```
+Mit folgendem Code wird die Interne sowie die Externe IP-Adresse des DB-Servers ermittelt, um später die Kommunikation zu gewährleisten.
+```
+WPDBInstanceId=$(aws ec2 describe-instances --query 'Reservations[0].Instances[0].InstanceId' --output text --filters "Name=tag:Name,Values=WordPressDB")
+WPDBPrivateIpAddressip=$(aws ec2 describe-instances --query 'Reservations[0].Instances[0].PrivateIpAddress' --output text --filters "Name=tag:Name,Values=WordPressDB")
+```
+Hier wird die Id der Security-group ausgelesen, um später Regeln den entsprechenden Regeln den Gruppen zuzuweisen.
+```
+SecurityGroupId=$(aws ec2 describe-security-groups --group-names 'WordPress-net-Extern' --query 'SecurityGroups[0].GroupId' --output text)
+```
+Hier werden die Regeln für die Security-Groups definiert.
+```
+aws ec2 authorize-security-group-ingress --group-name WordPress-net-Intern --protocol tcp --port 3306 --source-group $SecurityGroupId
+aws ec2 authorize-security-group-ingress --group-name WordPress-net-Intern --protocol tcp --port 22 --source-group $SecurityGroupId
+aws ec2 authorize-security-group-ingress --group-name WordPress-net-Extern --protocol tcp --port 80 --cidr 0.0.0.0/0
+aws ec2 authorize-security-group-ingress --group-name WordPress-net-Extern --protocol tcp --port 443 --cidr 0.0.0.0/0
+aws ec2 authorize-security-group-ingress --group-name WordPress-net-Extern --protocol tcp --port 22 --cidr 0.0.0.0/0
+```
+Mithilfe dieses Codes wird das Init-file für die CMS-instanz erstellt. Wie auch bei der Datenbank, wird die Setupdatei direkt aus dem Repository heruntergeladen und ausgeführt
+```
+cat <<END > init.yaml
+#cloud-config
+package_update: true
+packages:
+  - git
+  - ca-certificates
+  - curl
+  - gnupg
+  - software-properties-common
+  - apt-transport-https
+  - cron
+  - snapd
+runcmd:
+  - git clone "https://github.com/davidbuerge1/M346-CMS.git" WordPressCMS
+  - cd WordPressCMS/server-setup
+  - chmod +x CMS-server-setup.sh
+  - sudo bash CMS-server-setup.sh $WPDBPrivateIpAddressip $password WordPressDB
+END
+
+aws ec2 run-instances --image-id ami-08c40ec9ead489470 --count 1 --instance-type t2.micro --key-name WordPress-AWS-Key --security-groups WordPress-net-Extern --iam-instance-profile Name=LabInstanceProfile --user-data file://init.yaml --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=WordPressCMS}]'
 ```   
     
 
@@ -65,7 +142,7 @@ Für das Prokelt musste das CMS umgesetzt werden, sowie eine ausführliche Dokum
   
 **Testfall 2**  
 
-<a name="anker6"></a>
+<a name="anker7"></a>
 ## 5. Reflexion  
 **Tibor Blasko**  
 
