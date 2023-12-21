@@ -48,7 +48,7 @@ packages:
   - snapd
 runcmd:
   - git clone "https://github.com/davidbuerge1/M346-CMS.git" WordPressCMS
-  - cd WordPressCMS/server-setup 
+  - cd WordPressCMS/server-setup
   - chmod +x CMS-server-setup.sh
   - bash CMS-server-setup.sh $WPDBPrivateIpAddressip $password WordPressDB
 END
