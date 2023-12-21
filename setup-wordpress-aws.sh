@@ -15,7 +15,7 @@ runcmd:
   - git clone "https://github.com/davidbuerge1/M346-CMS.git" setup
   - cd setup/server-setup
   - chmod +x DB-server-setup.sh
-  - bash DB-server-setup.sh $password
+  - sudo bash DB-server-setup.sh $password
 END
 
 aws ec2 create-key-pair --key-name WordPress-AWS-Key --key-type rsa --query 'KeyMaterial' --output text > ./WordPress-AWS-Key.pem
@@ -50,7 +50,7 @@ runcmd:
   - git clone "https://github.com/davidbuerge1/M346-CMS.git" WordPressCMS
   - cd WordPressCMS/server-setup
   - chmod +x CMS-server-setup.sh
-  - bash CMS-server-setup.sh $WPDBPrivateIpAddressip $password WordPressDB
+  - sudo bash CMS-server-setup.sh $WPDBPrivateIpAddressip $password WordPressDB
 END
 
 aws ec2 run-instances --image-id ami-08c40ec9ead489470 --count 1 --instance-type t2.micro --key-name WordPress-AWS-Key --security-groups WordPress-net-Extern --iam-instance-profile Name=LabInstanceProfile --user-data file://init.yaml --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=WordPressCMS}]'
