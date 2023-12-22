@@ -48,7 +48,7 @@ Hier wird ein zufälliges Passwort generiert, welches von den Instanzen übernom
 ```
 password=$(openssl rand -base64 36 | tr -dc 'a-zA-Z0-9' | head -c 54)
 ```
-Dieser Code erstellt das Init-file für die Datenbank. Dabei werden die benötigten Packages installiert sowie befehle aufgeschrieben, die später auf der Instanz ausgeführt werden sollen. Beispielsweise das ausühren des Datenbank Setups. Ausserdem wird die Setupdatei der Datenbank direkt aus unserem Repository heruntergeladen um Fehler zu verhindern und mithilfe des zuvor erstellten Passworts ausgeführt.
+Dieser Code erstellt das Init-file für die Datenbank. Dabei werden die benötigten Packages installiert sowie befehle aufgeschrieben, die später auf der Instanz ausgeführt werden sollen. Beispielsweise das ausühren des Datenbank Setups. Ausserdem wird die Setupdatei der Datenbank direkt aus unserem Repository heruntergeladen um Fehler zu verhindern und mithilfe des zuvor erstellten Passworts ausgeführt. Daher ist das Repository Public und für alle zugänglich, da ansonsten der download von den Instanzen nicht funktionieren würde
 ```
 cat <<END > init.yaml
 #cloud-config
