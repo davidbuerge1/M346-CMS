@@ -193,6 +193,7 @@ Hier sind die Voraussetungen, bevor die Instanzen installiert werden können.
 
 
 **Fabian Peter**
+Für mich war das Projekt sehr interessant, ich habe viel neues daraus gelernt. Auch konnte ich schon gelerntes sehr gut anwenden. Da ich im Basislehrjahr als abschluss Projekt Nextcloud auf Debian installieren musste, waren mir vieles schon bekannt. Beispielsweise wusste ich genau wofür eine .conf-Datei verwendet wird und in welchem Verzeichnis sie liegt. Auch sehr Hilfreich war das Vorwissen zu allen Linux-Commands. Ich finde, dass uns in der Schule sehr gut die Verbindung zum AWS erklärt wurde, was somit keine grosse Herausforderung mehr war. Jedoch war das Skript ansich dafür viel schwerer. Es war nicht ganz einfach ein Skript von 0 auf zu schreiben. Das nächste mal würde ich die Kommunikation untereinander besser machen, damit nicht immer nur jemand daran arbeitet. Im grossen und ganze war aber sehr viel spannendes im Projekt dabei und ich denke wir haben es gut abgeschlossen. 
 
 
 **Romeo Davatz**
