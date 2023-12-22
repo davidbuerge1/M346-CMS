@@ -117,7 +117,7 @@ Hier wird die zweite Instanz  mithilfe des Init-files erstellt.
 aws ec2 run-instances --image-id ami-08c40ec9ead489470 --count 1 --instance-type t2.micro --key-name WordPress-AWS-Key --security-groups WordPress-net-Extern --iam-instance-profile Name=LabInstanceProfile --user-data file://init.yaml --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=WordPressCMS}]'
 ```
 
-## [CMS-server-setup.sh](https://github.com/davidbuerge1/M346-CMS/blob/main/server-setup/CMS-server-setup.sh)
+## [DB-server-setup.sh](https://github.com/davidbuerge1/M346-CMS/blob/main/server-setup/DB-server-setup.sh)
 Dieser Befehl führt eine Änderung in der Datei "50-server.cnf" durch, die sich im Verzeichnis "/etc/mysql/mariadb.conf.d/" befindet. Dabei wird die Option "bind-address" so modifiziert, dass sie auf "127.0.0.1" festgelegt wird.
 ```
 sudo sed -i 's/bind-address\s*=.*/bind-address = 127.0.0.1/' /etc/mysql/mariadb.conf.d/50-server.cnf
@@ -160,23 +160,33 @@ sed -i "s/<DB-Name>/$3/g" docker-compose.yml
     
 
 <a name="anker5"></a>
-## 3. Anleitung  
+## 3. Anleitung zur Installation 
 ### 1. Schritt 
 Hier sind die Voraussetungen, bevor die Instanzen installiert werden können.
  
+- [X] Auf der Ubuntumaschine muss das AWS bereits konfiguriert sein.
 - [X] Vollständige Konfiguration vom AWS Client auf einer Ubuntu-maschine.
-- [x] Es darf kein Key mit dem Namen 
+- [X] Es darf kein Key, auf dem lokalen PC oder auf dem AWS, mit dem Namen "WordPress-AWS-Key" geben.
+- [X] Es darf keinen Ordner mit dem Namen WordPressCMS existieren.
+- [X] Auf dem AWS darf es keine Instanzen mit den Namen "WordPressDB" und "WordPressCMS" geben.
+- [X] Auf dem AWS darf es keine Sicherheitsgruppe mit dem Namen "WordPress-net-Intern" oder "WordPress-net-Extern" geben.
   
 ### 2. Schritt
-  
-  
+Das Script muss zuerst mithilfe dieses Befehls ausgeführt heruntergeladen werden.
+```
+git clone "https://github.com/davidbuerge1/M346-CMS.git" WordPressCMS
+```
+
 ### 3. Schritt  
+Nun muss in das zuvor heruntergeladene verzeichnis gewechselt werden. Die Berechtigungen der Datei müssen so angepasst werden, dass die Datei executable ist.
 
 ### 4. Schritt  
+Skrip muss mithilfe folgendes Befehls ausgeführt werden.
 
-  
-### 5. Anpassungen bei Neustart eines Servers  
+### 5. Schritt
+Das Programm bleibt bei der Erstellung der beiden Instanzen stehen. Um das Programm weiter auszuführen, muss in der Konsole mit q weitergefahren werden. 
 
+Nachdem das Programm fertig durchgelaufen ist, dauert es einige Minuten, bis die Webseite zugänglich ist. Die Öffentliche IP-Adresse, wird in der Konsole ausgegeben.
   
 ### 6. Löschen aller Ressourcen  
 
