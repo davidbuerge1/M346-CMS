@@ -58,4 +58,3 @@ END
 aws ec2 run-instances --image-id ami-08c40ec9ead489470 --count 1 --instance-type t2.micro --key-name WordPress-AWS-Key --security-groups WordPress-net-Extern --iam-instance-profile Name=LabInstanceProfile --user-data file://init.yaml --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=WordPressCMS}]'
 
 echo "WordPress wird gerade aufgesetzt..."
-echo "Die Webseite wird unter $WPDBPrivateIpAddressipCMS"
