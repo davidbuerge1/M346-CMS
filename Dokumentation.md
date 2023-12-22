@@ -5,11 +5,13 @@ Dieses Repository wurde in Zusammenarbeit von Fabian Peter, Romeo Davatz und Dav
 [**1. Projektinformationen**](#anker)  
 [**1.1 CMS**](#anker1)  
 [**1.2 Aufgaben und Zuständigkeit**](#anker2)  
-[**2. Installation und Konfiguration**](#anker3) 
-[**2. Installation und Konfiguration**](#anker8) 
-[**3. Anleitung**](#anker4)  
-[**4. Testfälle**](#anker5)  
-[**5. Reflexion**](#anker6)
+[**1.3 Aufgaben und Zuständigkeit**](#anker3)  
+[**2. Installation und Konfiguration**](#anker4)  
+[**2.1 Erklärung des Codes**](#anker8)  
+[**3. Anleitung**](#anker5)  
+[**4. Testfälle**](#anker6)  
+[**5. Reflexion**](#anker7)
+
 <a name="anker"></a>
 ## 1. Projektinformationen
 In diesem Abschnitt werden grundlegende Informationen zum Projekt wie die gegebene Aufgabe, Wahl des CMS und die Aufgabenverteilung in der Gruppe aufgezählt.
@@ -213,9 +215,9 @@ cd WordPressCMS/server-setup/docker
 **David Bürge**  
 Ich denke ich konnte in diesem Projekt sehr viel lernen. Besonders im Bezug auf die Fehlerbehebung. Das im Unterricht gelernte konnte nun auch praktisch angewendet werden. Anfangs hatten wir noch einige schwierigkeiten, da wir nicht richtig wussten wo und wie wir am Projekt beginnen sollten. Daher gibt es auch das Script [InstallInstances.sh](https://github.com/davidbuerge1/M346-CMS/blob/main/InstallInstances.sh). Nach einigem Informieren und ein wenig Starthilfe einer anderen Gruppe, konnte das Projekt jedoch erfolgreich abgeschlossen werden. Ich denke für ein nächstes Projekt, wäre vor allem die aufteilung der verschiedenen Arbeiten ein wichtiger Punkt. Insgesamt denke ich, dass das Projekt eine sehr interessante und lehrreiche Erfahrung war und denke, dass wir das Projekt erfolgreich abschliessen konnten.
 
-**Fabian Peter** 
+**Fabian Peter**  
 Für mich war das Projekt sehr interessant, ich habe viel neues daraus gelernt. Auch konnte ich schon gelerntes sehr gut anwenden. Da ich im Basislehrjahr als abschluss Projekt Nextcloud auf Debian installieren musste, waren mir vieles schon bekannt. Beispielsweise wusste ich genau wofür eine .conf-Datei verwendet wird und in welchem Verzeichnis sie liegt. Auch sehr Hilfreich war das Vorwissen zu allen Linux-Commands. Ich finde, dass uns in der Schule sehr gut die Verbindung zum AWS erklärt wurde, was somit keine grosse Herausforderung mehr war. Jedoch war das Skript ansich dafür viel schwerer. Es war nicht ganz einfach ein Skript von 0 auf zu schreiben. Das nächste mal würde ich die Kommunikation untereinander besser machen, damit nicht immer nur jemand daran arbeitet. Im grossen und ganze war aber sehr viel spannendes im Projekt dabei und ich denke wir haben es gut abgeschlossen. 
 
 
-**Romeo Davatz**
+**Romeo Davatz**  
 Für mich war das Projekt eine gute Erfahrung. Ich konnte das, was ich im Unterricht gelernt habe praktisch anwenden. Wir konnten die Probleme gut angehen und sind wie ich denke zu einem guten ergebniss gekommen. Für ein späteres Projekt, könnten wir die Aufgabenverteilung in der Gruppe verbessern. 
