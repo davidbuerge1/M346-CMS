@@ -26,6 +26,8 @@ aws ec2 run-instances --image-id ami-08c40ec9ead489470 --count 1 --instance-type
 WPDBInstanceId=$(aws ec2 describe-instances --query 'Reservations[0].Instances[0].InstanceId' --output text --filters "Name=tag:Name,Values=WordPressDB")
 WPDBPrivateIpAddressip=$(aws ec2 describe-instances --query 'Reservations[0].Instances[0].PrivateIpAddress' --output text --filters "Name=tag:Name,Values=WordPressDB")
 
+WPDBPrivateIpAddressipCMS=$(aws ec2 describe-instances --query 'Reservations[0].Instances[0].PrivateIpAddress' --output text --filters "Name=tag:Name,Values=WordPressCMS")
+
 SecurityGroupId=$(aws ec2 describe-security-groups --group-names 'WordPress-net-Extern' --query 'SecurityGroups[0].GroupId' --output text)
 
 aws ec2 authorize-security-group-ingress --group-name WordPress-net-Intern --protocol tcp --port 3306 --source-group $SecurityGroupId
@@ -55,3 +57,4 @@ END
 
 aws ec2 run-instances --image-id ami-08c40ec9ead489470 --count 1 --instance-type t2.micro --key-name WordPress-AWS-Key --security-groups WordPress-net-Extern --iam-instance-profile Name=LabInstanceProfile --user-data file://init.yaml --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=WordPressCMS}]'
 
+echo "WordPress wird gerade aufgesetzt..."
