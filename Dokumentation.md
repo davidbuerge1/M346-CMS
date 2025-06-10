@@ -189,7 +189,7 @@ Skrip muss mithilfe folgendes Befehls ausgeführt werden.
 ### 5. Schritt
 Das Programm bleibt bei der Erstellung der beiden Instanzen stehen und bietet eine Übersicht. Um das Programm weiter auszuführen, muss in der Konsole mit q weitergefahren werden. 
 
-![image](https://github.com/davidbuerge1/M346-CMS/blob/main/server-setup/Screenshot%202023-12-22%20221931.png)
+![image](Pictures/Screenshot%202023-12-22%20221931.png)
 
 Nachdem das Programm fertig durchgelaufen ist, dauert es einige Minuten, bis die Webseite zugänglich ist. Danach kann die Webseite mithilfe der öffentlichen IP-Adresse geöffnet werden.
 
@@ -198,7 +198,7 @@ Nachdem das Programm fertig durchgelaufen ist, dauert es einige Minuten, bis die
 **Testfall 1** 
 Wir hatten lange die Prtoblematik, dass die CMS-Instanz keine Verbindung mit der DB-Instanz herstellen konnte. Dabei erschien folgende Fehlermeldung.
 
-![image2](https://github.com/davidbuerge1/M346-CMS/blob/main/server-setup/207bb161-4192-4b38-9554-fa0202a65119.jpg)
+![image2](Pictures/207bb161-4192-4b38-9554-fa0202a65119.jpg)
 
 Die IP-Adressen werden mithilfe der unten stehenden Befehle ausgelesen. Der Fehler entstand, da auf dem AWS, auf dem die Instanzen installiert werden sollten bereits Instanzen mit dem gleichen Namen existierten. Daher konnte die IP-Adresse des Servers nicht ausgelesen werden. Im jetztigen Script haben wir dies korrigiert. Nun wurden keine weiteren fehler gefunden.
   
